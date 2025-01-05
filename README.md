@@ -26,24 +26,18 @@ Le fasi che regolano l’interazione tra questi moduli sono le seguenti:
 Per valutare l’efficacia delle azioni consigliate, è stata sviluppata una metrica che considera sia le caratteristiche delle azioni disponibili sia lo stato attuale della partita. Tale metrica consente di calcolare uno **score** associato a ciascuna azione, rappresentando il grado di efficacia di ogni azione specifica nel contesto del turno in corso.
 La formula dello **score** è definita come segue:
 
-\[
-\text{Score} =
-\begin{cases}
-\frac{\alpha \cdot d}{hpn} - \frac{\mu \cdot mpc}{mpg} & \text{se } hp \text{ utente } > 30\% \\
-\frac{\alpha \cdot d}{hpn} + \frac{\beta \cdot (hpr + mpr)}{hpg + mpg} - \frac{\mu \cdot mpc}{mpg} & \text{se } hp \text{ utente } < 30\%
-\end{cases}
-\]
+![image](https://github.com/user-attachments/assets/779227d4-0906-43d9-bd26-a4ec152c9ea1)
 
 Dove:
-- **\(d\)**: danno inflitto dall’azione scelta.
-- **\(hpn\)**: punti vita del nemico.
-- **\(mpc\)**: punti magia necessari per utilizzare l’azione.
-- **\(mpg\)**: punti magia disponibili del giocatore.
-- **\(hpr\)**: punti vita che possono essere recuperati.
-- **\(mpr\)**: punti magia che possono essere recuperati.
-- **\(hpg\)**: punti vita del giocatore.
+- **d**: danno inflitto dall’azione scelta.
+- **hp<sub>n</sub>**: punti vita del nemico.
+- **mp<sub>c</sub>**: punti magia necessari per utilizzare l’azione.
+- **mp<sub>g</sub>**: punti magia disponibili del giocatore.
+- **hp<sub>r</sub>**: punti vita che possono essere recuperati.
+- **mp<sub>r</sub>**: punti magia che possono essere recuperati.
+- **hp<sub>g</sub>**: punti vita del giocatore.
 
-Sono stati definiti tre pesi, **\(\alpha\)**, **\(\beta\)** e **\(\mu\)**, che permettono di bilanciare l’importanza del danno inflitto, il costo delle azioni e la quantità di cura da utilizzare.
+Sono stati definiti tre pesi, **α**, **β** e **μ**, che permettono di bilanciare l’importanza del danno inflitto, il costo delle azioni e la quantità di cura da utilizzare.
 Lo score viene infine normalizzato in un invervallo tra 0 ed 1, dove 0 indica un’azione inefficiente, ed 1 azione particolarmente efficiente.
 
 ### Note sulla Metrica
