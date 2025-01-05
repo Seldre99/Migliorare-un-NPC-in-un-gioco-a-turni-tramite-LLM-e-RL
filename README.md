@@ -9,7 +9,9 @@ L’architettura proposta comprende tre moduli principali:
 - **User**: rappresenta l’utente all’interno dell’environment.
 - **Helper-LLM**: rappresenta il LLM incaricato di fornire consigli su quali azioni intraprendere.
 - **Reviewer-LLM**: è un modello basato su LLM che fornisce istruzioni per migliorare il reasoning del modulo Helper-LLM.
+
 ![Architettura dei Moduli](architettura.jpg)
+
 Le fasi che regolano l’interazione tra questi moduli sono le seguenti:
 1. **Generazione del prompt**:  
    Ad ogni turno di gioco, il modulo User genera un prompt contenente informazioni dettagliate sullo stato dell’environment, inclusa l’ultima azione effettuata dal nemico. Questo prompt viene inviato al modulo Helper-LLM ed al modulo Reviewer-LLM.
@@ -19,3 +21,32 @@ Le fasi che regolano l’interazione tra questi moduli sono le seguenti:
    Il modulo Reviewer-LLM analizza il prompt e la risposta iniziale del modulo Helper-LLM ed individua eventuali punti non considerati all’interno del reasoning. Sulla base di questa analisi elabora delle istruzioni che vengono restituite al modulo Helper-LLM.
 4. **Riformulazione della risposta**:  
    Il modulo Helper-LLM, sulla base delle istruzioni ricevute dal modulo Reviewer-LLM, riformula la risposta iniziale per ottimizzare il reasoning e migliorare la coerenza del suggerimento. La risposta ed il reasoning aggiornati vengono infine forniti al modulo User.
+
+## Metrica per la Valutazione delle Azioni
+Per valutare l’efficacia delle azioni consigliate, è stata sviluppata una metrica che considera sia le caratteristiche delle azioni disponibili sia lo stato attuale della partita. Tale metrica consente di calcolare uno **score** associato a ciascuna azione, rappresentando il grado di efficacia di ogni azione specifica nel contesto del turno in corso.
+La formula dello **score** è definita come segue:
+
+\[
+\text{Score} =
+\begin{cases}
+\frac{\alpha \cdot d}{hpn} - \frac{\mu \cdot mpc}{mpg} & \text{se } hp \text{ utente } > 30\% \\
+\frac{\alpha \cdot d}{hpn} + \frac{\beta \cdot (hpr + mpr)}{hpg + mpg} - \frac{\mu \cdot mpc}{mpg} & \text{se } hp \text{ utente } < 30\%
+\end{cases}
+\]
+
+Dove:
+- **\(d\)**: danno inflitto dall’azione scelta.
+- **\(hpn\)**: punti vita del nemico.
+- **\(mpc\)**: punti magia necessari per utilizzare l’azione.
+- **\(mpg\)**: punti magia disponibili del giocatore.
+- **\(hpr\)**: punti vita che possono essere recuperati.
+- **\(mpr\)**: punti magia che possono essere recuperati.
+- **\(hpg\)**: punti vita del giocatore.
+
+Sono stati definiti tre pesi, **\(\alpha\)**, **\(\beta\)** e **\(\mu\)**, che permettono di bilanciare l’importanza del danno inflitto, il costo delle azioni e la quantità di cura da utilizzare.
+Lo score viene infine normalizzato in un invervallo tra 0 ed 1, dove 0 indica un’azione inefficiente, ed 1 azione particolarmente efficiente.
+
+### Note sulla Metrica
+Questa metrica tiene conto della situazione del giocatore:  
+- Quando i punti vita dell’utente sono superiori al 30%, si privilegia il danno inflitto.
+- Quando i punti vita dell’utente sono inferiori al 30%, si considera anche la capacità di recupero di punti vita e punti magia, bilanciando l'efficacia complessiva dell'azione.
