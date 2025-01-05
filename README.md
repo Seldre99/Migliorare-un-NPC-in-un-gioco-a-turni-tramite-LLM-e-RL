@@ -53,7 +53,7 @@ Per implementare il modulo Reviewer-LLM è stato adottato un approccio di addest
 ![image](https://github.com/user-attachments/assets/9abea6e6-dc87-41de-8982-dd65478a6f8c)
 
 ## Note sui file presenti nel progetto
-- *classes*: classi relative all'implementazione dell'agente di RL (agent.py), definizione dell'environment (environment.py), definizione del gioco (game.py, inventory.py, magic.py), definizione di Reviewer-LLM (instructor_agent.py), definizione di Helper-LLM (llm_agent.py).
+- **classes**: classi relative all'implementazione dell'agente di RL (agent.py), definizione dell'environment (environment.py), definizione del gioco (game.py, inventory.py, magic.py), definizione di Reviewer-LLM (instructor_agent.py), definizione di Helper-LLM (llm_agent.py).
 - **dqn**: implementazione del gioco con user definito tramite agente di RL (DQN-game.py), nello specifico tramite Deep Q Network. Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
 - **dqn_llm**: implementazione del gioco con azioni definite da Helper-LLM (DQN+LLM game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
 - **dqn_llm_rl**: implementazione del gioco con azioni definite da Helper-LLM con supporto di Reviewewr_LLM (DQN+LLM+RL game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
