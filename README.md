@@ -23,7 +23,7 @@ Le fasi che regolano l’interazione tra questi moduli sono le seguenti:
    Il modulo Helper-LLM, sulla base delle istruzioni ricevute dal modulo Reviewer-LLM, riformula la risposta iniziale per ottimizzare il reasoning e migliorare la coerenza del suggerimento. La risposta ed il reasoning aggiornati vengono infine forniti al modulo User.
 
 ## Metrica per la Valutazione delle Azioni
-Per valutare l’efficacia delle azioni consigliate, è stata sviluppata una metrica che considera sia le caratteristiche delle azioni disponibili sia lo stato attuale della partita. Tale metrica consente di calcolare uno **score** associato a ciascuna azione, rappresentando il grado di efficacia di ogni azione specifica nel contesto del turno in corso.
+Per valutare l’efficacia delle azioni consigliate, è stata sviluppata una metrica che considera sia le caratteristiche delle azioni disponibili sia lo stato attuale della partita (action_score.py). Tale metrica consente di calcolare uno **score** associato a ciascuna azione, rappresentando il grado di efficacia di ogni azione specifica nel contesto del turno in corso.
 La formula dello **score** è definita come segue:
 
 ![image](https://github.com/user-attachments/assets/779227d4-0906-43d9-bd26-a4ec152c9ea1)
@@ -37,10 +37,25 @@ Dove:
 - **mp<sub>r</sub>**: punti magia che possono essere recuperati.
 - **hp<sub>g</sub>**: punti vita del giocatore.
 
-Sono stati definiti tre pesi, **α**, **β** e **μ**, che permettono di bilanciare l’importanza del danno inflitto, il costo delle azioni e la quantità di cura da utilizzare.
+Sono stati definiti tre pesi, **α**, **β** e **γ**, che permettono di bilanciare l’importanza del danno inflitto, il costo delle azioni e la quantità di cura da utilizzare.
 Lo score viene infine normalizzato in un invervallo tra 0 ed 1, dove 0 indica un’azione inefficiente, ed 1 azione particolarmente efficiente.
 
 ### Note sulla Metrica
 Questa metrica tiene conto della situazione del giocatore:  
 - Quando i punti vita dell’utente sono superiori al 30%, si privilegia il danno inflitto.
 - Quando i punti vita dell’utente sono inferiori al 30%, si considera anche la capacità di recupero di punti vita e punti magia, bilanciando l'efficacia complessiva dell'azione.
+
+## Reviewer-LLM
+Per implementare il modulo Reviewer-LLM è stato adottato un approccio di addestramento a due fasi:
+1. **Learning Supervisionato**: nella prima fase il modello è stato addestrato ad analizzare il prompt di gioco e la risposta preliminare fornita dall’NPC, per poter generare istruzioni appropriate (FlanT5-instructor.py). A tal fine, è stato costruito un dataset etichettato contenente coppie di prompt, risposte e relative istruzioni (dataset_generation.py, dataset_2.py, game_scenarios_dataset_2.csv). Questo dataset ha supportato la fase di addestramento iniziale, consentendo al modello di acquisire una comprensione approfondita delle istruzioni da fornire sulla base di diversi scenari di gioco.
+2. **Proximal Policy Optimization**: nella seconda fase il modello è stato sottoposto ad un fine-tuning con Reinforcement Learning tramite l'algoritmo del PPO (/dqn_llm_rl/ppo_training.py), utilizzando una parte del dataset precedentemente creato (game_scenarios_dataset_3.py). Questa fase è stata progettata per ottimizzare le prestazioni del modello, riducendo le possibilità di generare risposte contenenti allucinazioni.
+
+![image](https://github.com/user-attachments/assets/9abea6e6-dc87-41de-8982-dd65478a6f8c)
+
+## Note sui file presenti
+*classes*: classi relative all'implementazione dell'agente di RL (agent.py), definizione dell'environment (environment.py), definizione del gioco (game.py, inventory.py, magic.py), definizione di Reviewer-LLM (instructor_agent.py), definizione di Helper-LLM (llm_agent.py).
+*dqn*: implementazione del gioco con user definito tramite agente di RL (DQN-game.py), nello specifico tramite Deep Q Network. Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
+*dqn_llm*: implementazione del gioco con azioni definite da Helper-LLM (DQN+LLM game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
+*dqn_llm_rl*: implementazione del gioco con azioni definite da Helper-LLM con supporto di Reviewewr_LLM (DQN+LLM+RL game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
+*dqn_npc*: implementazione del test basato su 500 episodi in cui le prime 150 sono giocate dal solo DQN, mentre le restanti 350 sono giocate con i consigli di Helper-LLM e Reviewer-LLM (Final DQN game.py). Inoltre, è presente il csv del success rate e i grafici relativi alla fase di sperimentazione.
+*images e success_rate*: grafici relativi alla fase di sperimentazione ed al confronto dei success_rate.
