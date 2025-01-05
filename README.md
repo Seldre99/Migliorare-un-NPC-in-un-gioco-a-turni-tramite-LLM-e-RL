@@ -52,10 +52,13 @@ Per implementare il modulo Reviewer-LLM è stato adottato un approccio di addest
 
 ![image](https://github.com/user-attachments/assets/9abea6e6-dc87-41de-8982-dd65478a6f8c)
 
-## Note sui file presenti
-*classes*: classi relative all'implementazione dell'agente di RL (agent.py), definizione dell'environment (environment.py), definizione del gioco (game.py, inventory.py, magic.py), definizione di Reviewer-LLM (instructor_agent.py), definizione di Helper-LLM (llm_agent.py).
-*dqn*: implementazione del gioco con user definito tramite agente di RL (DQN-game.py), nello specifico tramite Deep Q Network. Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
-*dqn_llm*: implementazione del gioco con azioni definite da Helper-LLM (DQN+LLM game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
-*dqn_llm_rl*: implementazione del gioco con azioni definite da Helper-LLM con supporto di Reviewewr_LLM (DQN+LLM+RL game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
-*dqn_npc*: implementazione del test basato su 500 episodi in cui le prime 150 sono giocate dal solo DQN, mentre le restanti 350 sono giocate con i consigli di Helper-LLM e Reviewer-LLM (Final DQN game.py). Inoltre, è presente il csv del success rate e i grafici relativi alla fase di sperimentazione.
-*images e success_rate*: grafici relativi alla fase di sperimentazione ed al confronto dei success_rate.
+## Note sui file presenti nel progetto
+- *classes*: classi relative all'implementazione dell'agente di RL (agent.py), definizione dell'environment (environment.py), definizione del gioco (game.py, inventory.py, magic.py), definizione di Reviewer-LLM (instructor_agent.py), definizione di Helper-LLM (llm_agent.py).
+- **dqn**: implementazione del gioco con user definito tramite agente di RL (DQN-game.py), nello specifico tramite Deep Q Network. Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
+- **dqn_llm**: implementazione del gioco con azioni definite da Helper-LLM (DQN+LLM game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
+- **dqn_llm_rl**: implementazione del gioco con azioni definite da Helper-LLM con supporto di Reviewewr_LLM (DQN+LLM+RL game.py). Inoltre, sono presenti i csv del success rate relativi alla fase di sperimentazione.
+- **dqn_npc**: implementazione del test basato su 500 episodi in cui le prime 150 sono giocate dal solo DQN, mentre le restanti 350 sono giocate con i consigli di Helper-LLM e Reviewer-LLM (Final DQN game.py). Inoltre, è presente il csv del success rate e i grafici relativi alla fase di sperimentazione.
+- **images e success_rate**: grafici relativi alla fase di sperimentazione ed al confronto dei success_rate.
+
+## Ulteriori informazioni
+Per ulteriori informazioni consultare il file Tesi_Andrea_Selice.pdf, presente nella cartella Tesi.
